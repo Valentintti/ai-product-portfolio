@@ -1,0 +1,156 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import HeroExperience from "../components/HeroExperience";
+import ActionLink from "../components/ActionLink";
+import { projects } from "../data/projects";
+
+const base = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+const logistics = projects[0];
+const medask = projects[1];
+const tools = ["Codex", "Coze", "Claude Code", "Cursor", "WorkBuddy", "Kimi", "ChatGPT", "DeepSeek"];
+---
+
+<BaseLayout>
+  <main>
+    <HeroExperience client:load />
+
+    <section class="work section-shell" id="work">
+      <div class="section-heading">
+        <p>精选作品</p>
+        <h2>让 AI 进入流程，也让流程约束 AI。</h2>
+        <span>两个项目都从可验证的业务闭环出发，不以聊天界面作为终点。</span>
+      </div>
+
+      <div class="project-layout">
+        <article class="project project--lead">
+          <div class="project__visual project__visual--system">
+            <div class="system-title">
+              <span>01 · LOCAL END-TO-END DEMO</span>
+              <strong>查件小助</strong>
+              <small>物流 AI 客服</small>
+            </div>
+            <ol class="system-flow" aria-label="查件小助产品流程">
+              {logistics.productFlow.map((item, index) => (
+                <li>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <strong>{item}</strong>
+                </li>
+              ))}
+            </ol>
+            <div class="system-boundary">LLM proposes · Harness decides</div>
+          </div>
+          <div class="project__body">
+            <div class="project__meta">
+              <span>{logistics.status}</span>
+              <span>{logistics.role}</span>
+            </div>
+            <h3>{logistics.title} <small>{logistics.subtitle}</small></h3>
+            <p>{logistics.summary}</p>
+            <div class="project__actions">
+              <ActionLink client:load href={`${base}projects/logistics-agent/`} label="查看案例" icon="external" />
+              <ActionLink client:load href={logistics.links[0].href} label="查看 GitHub" icon="github" />
+            </div>
+          </div>
+        </article>
+
+        <article class="project project--side">
+          <div class="project__visual project__visual--screen">
+            <img src={`${base}assets/medask-screen.webp`} alt="MedAsk 在线规则版真实运行界面" loading="lazy" />
+            <span>REAL PRODUCT SCREEN · 02</span>
+          </div>
+          <div class="project__body">
+            <div class="project__meta">
+              <span>{medask.status}</span>
+              <span>{medask.role}</span>
+            </div>
+            <h3>{medask.title} <small>{medask.subtitle}</small></h3>
+            <p>{medask.summary}</p>
+            <div class="project__actions">
+              <ActionLink client:load href={`${base}projects/medask/`} label="查看案例" icon="external" />
+              <ActionLink client:load href={medask.links[0].href} label="打开 Demo" icon="external" />
+              <ActionLink client:load href={medask.links[1].href} label="GitHub" icon="github" />
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="method" id="method">
+      <div class="section-shell method__inner">
+        <div class="section-heading section-heading--compact">
+          <p>工作方法</p>
+          <h2>从一句想法，到一个能被检验的闭环。</h2>
+        </div>
+        <div class="method__steps">
+          <article>
+            <span>01</span>
+            <h3>收敛问题</h3>
+            <p>先确认用户、场景和真正需要发生的动作，把宽泛需求压缩成最短演示路径。</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>约束模型</h3>
+            <p>拆清模型和确定性逻辑的边界，为关键状态、风险条件和失败路径设置护栏。</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>验证结果</h3>
+            <p>用评测集、行为轨迹和真实反馈判断价值，不让一次漂亮回答替代产品结论。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbelt section-shell" aria-label="常用 AI 工具">
+      <p>EXPLORATION TOOLBELT</p>
+      <div class="toolbelt__track">
+        {tools.map((tool) => <span>{tool}</span>)}
+      </div>
+    </section>
+
+    <section class="about section-shell" id="about">
+      <div class="about__portrait" aria-hidden="true">
+        <span>CURIOUS BY DEFAULT</span>
+        <img src={`${base}assets/avatar-transparent.webp`} alt="" loading="lazy" />
+      </div>
+      <div class="about__copy">
+        <p class="section-label">关于我</p>
+        <h2>喜欢探索新事物，也享受把复杂问题一步步拆清楚。</h2>
+        <p>
+          我把快速学习、需求拆解、AI 工具探索和产品复盘放在同一条工作路径里。比起追逐功能数量，我更在意产品是否真的帮助用户完成任务。
+        </p>
+        <div class="profile-notes">
+          <article>
+            <strong>快速进入陌生领域</strong>
+            <span>先建立问题地图，再用原型和反馈快速校准。</span>
+          </article>
+          <article>
+            <strong>对长期投入有耐心</strong>
+            <span>云顶 / 金铲铲最强王者，无畏契约神话段位。</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="section-shell contact__inner">
+        <div>
+          <p>下一项值得验证的 AI 产品，聊聊看。</p>
+          <h2>高靖翔<br /><span>AI 产品经理</span></h2>
+        </div>
+        <div class="contact__actions">
+          <ActionLink client:load href="mailto:15384339691@163.com" label="15384339691@163.com" icon="external" />
+          <ActionLink client:load href="https://github.com/Valentintti" label="GitHub" icon="github" />
+          <ActionLink client:load href="https://linkedin.com/in/靖翔-高-9b3b243b8" label="LinkedIn" icon="linkedin" />
+          <ActionLink client:load href={`${base}resume/高靖翔_AI产品经理_工具探索版.docx`} label="下载完整简历" icon="download" download />
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <span>© 2026 高靖翔</span>
+    <span>Designed for AI product roles</span>
+  </footer>
+</BaseLayout>

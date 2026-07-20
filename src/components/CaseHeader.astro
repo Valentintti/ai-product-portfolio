@@ -1,0 +1,14 @@
+---
+const base = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+---
+
+<header class="case-nav">
+  <a class="wordmark" href={base} aria-label="返回首页">GJX<span>.</span></a>
+  <nav aria-label="案例导航">
+    <a href={`${base}#work`}>全部作品</a>
+    <a href={`${base}#about`}>关于我</a>
+    <a class="case-nav__resume" href={`${base}resume/高靖翔_AI产品经理_工具探索版.docx`}>下载简历</a>
+  </nav>
+</header>

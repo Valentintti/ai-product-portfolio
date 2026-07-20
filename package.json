@@ -1,0 +1,27 @@
+{
+  "name": "ai-product-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/react": "latest",
+    "@fontsource-variable/outfit": "latest",
+    "@phosphor-icons/react": "latest",
+    "astro": "latest",
+    "motion": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@astrojs/check": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "typescript": "^5.9.3"
+  }
+}

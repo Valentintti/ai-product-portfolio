@@ -1,0 +1,150 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import CaseHeader from "../../../components/CaseHeader.astro";
+import ActionLink from "../../../components/ActionLink";
+import { projects } from "../../../data/projects";
+
+const project = projects.find((item) => item.slug === "medask")!;
+const base = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+---
+
+<BaseLayout
+  title="MedAsk 案例 | 高靖翔"
+  description="MedAsk 医疗信息整理助手案例：用规则状态机、受控 LLM 候选、安全中断和评测门禁守住非诊断边界。"
+  ogImage="assets/medask-screen.png"
+>
+  <CaseHeader />
+  <main class="case-page case-page--medask">
+    <section class="case-hero section-shell">
+      <a class="case-back" href={`${base}#work`}>返回精选作品</a>
+      <div class="case-hero__grid">
+        <div class="case-hero__copy">
+          <p class="case-kicker">MEDICAL INTAKE · RULE-FIRST AI WORKFLOW</p>
+          <h1>把预问诊从自由对话，收敛为最多 7 轮的信息整理。</h1>
+          <p>{project.summary}</p>
+          <div class="case-actions">
+            <ActionLink client:load href="https://valentintti.github.io/medask-mvp/" label="打开在线 Demo" icon="external" />
+            <ActionLink client:load href="https://github.com/Valentintti/medask-mvp" label="查看 GitHub" icon="github" />
+          </div>
+        </div>
+        <dl class="case-meta">
+          <div><dt>角色</dt><dd>AI 产品设计 / 独立开发</dd></div>
+          <div><dt>项目状态</dt><dd>在线规则版 Demo</dd></div>
+          <div><dt>目标用户</dt><dd>18 至 65 岁成人</dd></div>
+          <div><dt>核心边界</dt><dd>只整理信息，不诊断与荐药</dd></div>
+        </dl>
+      </div>
+      <figure class="case-cover case-cover--medask">
+        <img src={`${base}assets/medask-screen.webp`} alt="MedAsk 在线规则版真实运行界面" />
+        <figcaption>GitHub Pages 在线规则版真实运行界面。</figcaption>
+      </figure>
+    </section>
+
+    <section class="case-section case-section--problem">
+      <div class="section-shell case-two-col">
+        <div>
+          <p class="case-section__label">问题与定位</p>
+          <h2>用户需要的是更完整的就诊信息，不是另一个会下诊断的聊天机器人。</h2>
+        </div>
+        <div class="case-prose">
+          <p>就医前，患者常常难以一次说清症状、时间、伴随情况和已经采取的措施。自由对话模型虽然表达自然，却可能遗漏关键字段、越界给出诊断或用药建议，也很难证明每一步为什么发生。</p>
+          <p>MedAsk 的唯一产品目标是整理用户主动提供的信息，生成结构化就诊摘要。它不是临床分诊、诊断、处方工具，也不替代医生。</p>
+        </div>
+      </div>
+      <div class="section-shell scope-line">
+        <span>输出：主诉、时间、症状、伴随情况、已采取措施</span>
+        <span>禁止：疾病概率、诊断结论、药物与治疗方案</span>
+      </div>
+    </section>
+
+    <section class="case-section section-shell">
+      <div class="case-section__heading">
+        <p class="case-section__label">规则状态机</p>
+        <h2>每一轮只收集当前最需要的信息，达到边界就停止。</h2>
+      </div>
+      <ol class="state-machine">
+        <li><span>idle</span><p>会话尚未开始，展示用途、限制与安全提示。</p></li>
+        <li><span>collecting</span><p>年龄和主诉在范围内，按槽位优先级追问，条件槽位只在需要时出现。</p></li>
+        <li><span>completed</span><p>达到 7 轮上限或没有剩余槽位，生成只来自用户原文的摘要。</p></li>
+        <li><span>escalated</span><p>命中保守风险规则，立即停止普通流程并给出固定人工就医提示。</p></li>
+        <li><span>unsupported</span><p>人群或主诉超出 Demo 范围，不让模型自行扩展能力。</p></li>
+      </ol>
+    </section>
+
+    <section class="case-section case-section--ink">
+      <div class="section-shell">
+        <div class="case-section__heading">
+          <p class="case-section__label">受控 LLM 候选</p>
+          <h2>让模型帮助理解自然语言，但不能控制风险、状态与最终写入。</h2>
+        </div>
+        <div class="control-grid">
+          <article><span>Before provider</span><h3>风险先于模型</h3><p>原始文本先经过确定性风险检查。命中明确风险时 Provider 调用次数为 0。</p></article>
+          <article><span>Candidate layer</span><h3>只提交槽位候选</h3><p>模型只能在本轮允许槽位中给出值、置信度与原文证据，不能提交诊断或状态字段。</p></article>
+          <article><span>After provider</span><h3>Harness 二次校验</h3><p>证据定位、局部否定、当前性、冲突与置信门槛全部通过后才可能写入答案。</p></article>
+        </div>
+        <div class="architecture-line">
+          <span>User text</span><i>→</i><span>Risk preemption</span><i>→</i><span>LLM candidate</span><i>→</i><span>Evidence check</span><i>→</i><span>Slot update</span><i>→</i><span>Summary</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section section-shell safety-section">
+      <div class="case-section__heading">
+        <p class="case-section__label">安全与边界</p>
+        <h2>失败时回到标准规则，不让模型失败变成产品状态。</h2>
+      </div>
+      <div class="safety-grid">
+        <article><span>01</span><h3>风险中断</h3><p>明确胸痛、明显呼吸困难、意识异常等表达触发固定升级。规则有限，不被描述为完整临床分诊。</p></article>
+        <article><span>02</span><h3>Policy Guard</h3><p>拦截系统生成的确诊、疾病概率、处方、药物推荐、剂量与治疗方案。</p></article>
+        <article><span>03</span><h3>原文隔离</h3><p>用户自述既往诊断可以被忠实记录并标注“用户自述”，不会被误判为系统建议。</p></article>
+        <article><span>04</span><h3>取消与回退</h3><p>超时、非法 JSON、页面卸载或会话重启都会取消请求，迟到响应不能写入新会话。</p></article>
+      </div>
+    </section>
+
+    <section class="case-section case-section--fog evaluation-section">
+      <div class="section-shell">
+        <div class="case-section__heading">
+          <p class="case-section__label">评测门禁</p>
+          <h2>把 Schema 合法、提取正确和临床有效性分开讨论。</h2>
+        </div>
+        <div class="metric-table" role="table" aria-label="真实 DeepSeek 合成工程评测">
+          <div role="row"><span role="columnheader">合成工程指标</span><span role="columnheader">3 轮结果</span></div>
+          <div role="row"><span role="cell">Schema valid rate</span><strong role="cell">96.30%</strong></div>
+          <div role="row"><span role="cell">Slot precision / recall</span><strong role="cell">77.27% / 58.93%</strong></div>
+          <div role="row"><span role="cell">Evidence grounding</span><strong role="cell">100%</strong></div>
+          <div role="row"><span role="cell">Risk preemption</span><strong role="cell">100%</strong></div>
+          <div role="row"><span role="cell">Diagnosis / medication leakage</span><strong role="cell">0 / 0</strong></div>
+          <div role="row"><span role="cell">Run-to-run consistency</span><strong role="cell">80%</strong></div>
+        </div>
+        <p class="truth-note">30 条人工编写合成案例，只验证语言标签、结构化输出和工程安全。它们不是临床准确率、诊断准确率或医疗有效性结论。</p>
+      </div>
+    </section>
+
+    <section class="case-section section-shell experiment-section">
+      <div>
+        <p class="case-section__label">真实产品取舍</p>
+        <h2>腹痛已经实现，但仍以 experimental 状态限制在规则与 Mock 层。</h2>
+      </div>
+      <div class="case-prose">
+        <p>腹痛的人工数据门禁未完全通过，因此真实 Provider 不放行该主诉。规则版采用保守字面边界和固定澄清，页面清楚标注实验状态。</p>
+        <p>这项决定保留了演示探索价值，也避免把尚未完成的数据验证包装成可用能力。产品范围由门禁决定，而不是由模型“看起来能回答”决定。</p>
+      </div>
+    </section>
+
+    <section class="case-section case-section--result">
+      <div class="section-shell case-two-col">
+        <div><p class="case-section__label">产品复盘</p><h2>在高风险场景中，少填一个槽位比多给一个错误结论更可接受。</h2></div>
+        <div class="case-prose"><p>真实评测中的 Slot recall 只有 58.93%，说明模型仍会漏掉可提取信息。我的选择不是提高自动写入比例，而是保留规则追问与固定回退，把 evidence grounding、风险前置和零诊断泄漏放在更高优先级。</p><p>下一阶段应继续扩充经人工审核的非敏感测试用例，完成隐私与供应商数据留存评审，再决定是否开放更多真实 Provider 场景。</p></div>
+      </div>
+    </section>
+
+    <section class="case-next">
+      <div class="section-shell">
+        <p>上一篇案例</p>
+        <a href={`${base}projects/logistics-agent/`}><strong>查件小助</strong><span>物流 AI 客服</span></a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

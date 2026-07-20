@@ -1,0 +1,154 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import CaseHeader from "../../../components/CaseHeader.astro";
+import ActionLink from "../../../components/ActionLink";
+import { projects } from "../../../data/projects";
+
+const project = projects.find((item) => item.slug === "logistics-agent")!;
+const base = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+---
+
+<BaseLayout
+  title="查件小助案例 | 高靖翔"
+  description="物流 AI 客服案例：用确定性 Harness、Function Calling、RAG 引用和 Mock 工单完成可验证的查件闭环。"
+  ogImage="assets/logistics-screen.png"
+>
+  <CaseHeader />
+  <main class="case-page case-page--logistics">
+    <section class="case-hero section-shell">
+      <a class="case-back" href={`${base}#work`}>返回精选作品</a>
+      <div class="case-hero__grid">
+        <div class="case-hero__copy">
+          <p class="case-kicker">LOGISTICS AI CUSTOMER SERVICE · LOCAL DEMO</p>
+          <h1>从一次查件，设计一条模型不能越权的客服闭环。</h1>
+          <p>{project.summary}</p>
+          <div class="case-actions">
+            <ActionLink client:load href="https://github.com/Valentintti/logistics-ai-customer-service" label="查看 GitHub" icon="github" />
+          </div>
+        </div>
+        <dl class="case-meta">
+          <div><dt>角色</dt><dd>AI 产品设计 / 独立开发</dd></div>
+          <div><dt>项目状态</dt><dd>本地端到端 Demo</dd></div>
+          <div><dt>核心场景</dt><dd>已发货但物流长时间未更新</dd></div>
+          <div><dt>真实边界</dt><dd>Mock 订单、物流与工单</dd></div>
+        </dl>
+      </div>
+      <figure class="case-cover case-cover--logistics">
+        <img src={`${base}assets/logistics-screen.webp`} alt="查件小助本地 Demo 真实首屏界面" />
+        <figcaption>真实项目首屏结构。截图处于未启动状态，没有伪造工具执行结果。</figcaption>
+      </figure>
+    </section>
+
+    <section class="case-section case-section--problem">
+      <div class="section-shell case-two-col">
+        <div>
+          <p class="case-section__label">问题与范围</p>
+          <h2>客服不是把答案说得像真人，而是把事情安全地办完。</h2>
+        </div>
+        <div class="case-prose">
+          <p>物流异常咨询需要核验订单归属、查询动态轨迹、判断异常、解释依据，并在用户确认后创建催件工单。纯 FAQ 只能回答静态问题，自由运行的大模型又可能跳过核验、编造进度或谎称工单已经创建。</p>
+          <p>我把 V1 收缩到一个商品无关但流程明确的场景：订单已发货，物流长时间未更新。退款、赔偿、丢件定责和真实平台写入全部排除。</p>
+        </div>
+      </div>
+      <div class="section-shell scope-line" aria-label="V1 范围">
+        <span>只做：查件、解释、确认催件、转人工</span>
+        <span>不做：退款、赔偿、丢件结论、真实生产写入</span>
+      </div>
+    </section>
+
+    <section class="case-section section-shell">
+      <div class="case-section__heading">
+        <p class="case-section__label">产品流程</p>
+        <h2>模型提出候选，Harness 决定，工具返回事实。</h2>
+      </div>
+      <ol class="case-flow">
+        <li><span>01</span><strong>订单核验</strong><p>订单号与手机号后四位通过 Mock 工具核验，失败时不泄露订单是否存在。</p></li>
+        <li><span>02</span><strong>轨迹查询</strong><p>白名单 Function Call 查询已核验订单的物流事件，客户端不能传入业务事实。</p></li>
+        <li><span>03</span><strong>异常判断</strong><p>版本化规则产生 normal、delayed 或 manual_review，不让模型自由下结论。</p></li>
+        <li><span>04</span><strong>用户确认</strong><p>写操作要求本轮明确确认与一次性签名令牌，令牌绑定动作和有效期。</p></li>
+        <li><span>05</span><strong>Mock 建单</strong><p>服务端幂等键防止重复创建；工具未返回有效工单号时绝不显示成功。</p></li>
+      </ol>
+    </section>
+
+    <section class="case-section case-section--ink">
+      <div class="section-shell">
+        <div class="case-section__heading">
+          <p class="case-section__label">模型与规则分工</p>
+          <h2>把语言能力放在候选层，把业务权力留在确定性系统。</h2>
+        </div>
+        <div class="control-grid">
+          <article>
+            <span>LLM / Provider</span>
+            <h3>可以提出什么</h3>
+            <p>识别用户意图、生成自然语言、提出一个严格的工具调用候选、整理转人工摘要。</p>
+          </article>
+          <article>
+            <span>Deterministic Harness</span>
+            <h3>必须决定什么</h3>
+            <p>风险抢占、Schema、白名单、状态前置、确认、幂等、工具执行和最终状态迁移。</p>
+          </article>
+          <article>
+            <span>Business tools</span>
+            <h3>事实从哪里来</h3>
+            <p>订单、轨迹、异常结论与工单号均来自类型化 Mock 工具，不从模型文案中提取。</p>
+          </article>
+        </div>
+        <div class="architecture-line" aria-label="受控处理链">
+          <span>User intent</span><i>→</i><span>Risk & Schema</span><i>→</i><span>Acceptance</span><i>→</i><span>State machine</span><i>→</i><span>Tool result</span><i>→</i><span>Trace</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section section-shell evidence-section">
+      <div class="case-section__heading">
+        <p class="case-section__label">RAG 与证据</p>
+        <h2>静态知识回答规则，动态业务事实必须查询工具。</h2>
+      </div>
+      <div class="evidence-grid">
+        <div class="evidence-copy">
+          <p>知识库由项目自建的虚构政策、SOP 和 FAQ 构成，共 39 个已批准 chunk。在线链路使用 BM25_ONLY，回答必须绑定 Claim、Evidence、Citation，并重新校验来源、版本与章节。</p>
+          <p>订单位置、真实 ETA、赔偿与工单结果不会由静态 RAG 猜测。无可靠证据时只允许澄清、回退或转人工。</p>
+        </div>
+        <blockquote class="evidence-note">
+          <strong>评测结论保持 BLOCKED</strong>
+          <p>BM25 v1.1 在 35 条合成开发集达到闸门，但一次性合成未见集触发安全硬门槛失败。项目没有继续查看未见集调参，也不宣称检索质量已通过。</p>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="case-section case-section--fog">
+      <div class="section-shell">
+        <div class="case-section__heading">
+          <p class="case-section__label">验证与结果</p>
+          <h2>验证工程闭环，不把本地测试包装成真实业务指标。</h2>
+        </div>
+        <div class="verification-list">
+          <article><strong>300</strong><span>后端自动化测试通过</span><p>覆盖状态机、隐私、确认、篡改、并发幂等、工具失败与 RAG 引用。</p></article>
+          <article><strong>4</strong><span>前端测试通过</span><p>覆盖 NOT_REAL 标识、种子场景、工具闭环、令牌不渲染和引用展示。</p></article>
+          <article><strong>0</strong><span>真实 Provider 调用</span><p>本地验收使用确定性模板与 Mock 工具，不产生模型质量结论。</p></article>
+        </div>
+        <p class="truth-note">结论：本地工程与演示验收通过；真实模型、真实业务系统和真实数据质量验收未运行。</p>
+      </div>
+    </section>
+
+    <section class="case-section section-shell retrospective">
+      <div>
+        <p class="case-section__label">产品复盘</p>
+        <h2>我主动牺牲了自由对话，换取可复现、可观察和可解释。</h2>
+      </div>
+      <div class="case-prose">
+        <p>V1 使用步骤式对话与确定性模板，因此自然度有限，但它能清楚证明每个状态如何变化、工具为何被执行、失败时如何回退。对于面试 Demo，这比一个偶尔表现惊艳但无法复现的聊天框更有说服力。</p>
+        <p>下一阶段只有在获得真实 Provider 授权、物流平台沙箱、Embedding 许可和数据隐私批准后才替换 Mock；Harness 的权限边界保持不变。</p>
+      </div>
+    </section>
+
+    <section class="case-next">
+      <div class="section-shell">
+        <p>下一篇案例</p>
+        <a href={`${base}projects/medask/`}><strong>MedAsk</strong><span>医疗问诊 / 信息整理助手</span></a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

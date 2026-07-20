@@ -1,0 +1,14 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const base = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+---
+
+<BaseLayout title="页面未找到 | 高靖翔">
+  <main class="not-found">
+    <p>404</p>
+    <h1>这条路径还没有被定义。</h1>
+    <a class="button button--primary" href={base}>返回作品集</a>
+  </main>
+</BaseLayout>
