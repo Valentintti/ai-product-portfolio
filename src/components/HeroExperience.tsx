@@ -108,7 +108,7 @@ export default function HeroExperience() {
           <a href="#work">作品</a>
           <a href="#method">方法</a>
           <a href="#about">关于</a>
-          <a className="nav-resume" href={`${base}resume/高靖翔_AI产品经理_工具探索版.docx`}>
+          <a className="nav-resume" href={`${base}resume/高靖翔_AI产品经理.pdf`} download>
             简历 <DownloadSimpleIcon weight="bold" aria-hidden="true" />
           </a>
         </nav>
@@ -153,7 +153,7 @@ export default function HeroExperience() {
             <a className="button button--primary" href="#work">
               查看作品 <ArrowDownIcon weight="bold" aria-hidden="true" />
             </a>
-            <a className="button button--quiet" href={`${base}resume/高靖翔_AI产品经理_工具探索版.docx`}>
+            <a className="button button--quiet" href={`${base}resume/高靖翔_AI产品经理.pdf`} download>
               下载简历 <DownloadSimpleIcon weight="bold" aria-hidden="true" />
             </a>
           </motion.div>
