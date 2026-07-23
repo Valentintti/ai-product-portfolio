@@ -174,10 +174,10 @@ export default function HeroExperience() {
           />
           <motion.a
             className="hero-fragment hero-fragment--logistics"
-            href="https://github.com/Valentintti/logistics-ai-customer-service"
+            href="https://valentintti.github.io/customer-service/"
             target="_blank"
             rel="noreferrer"
-            aria-label="查看查件小助 GitHub"
+            aria-label="打开查件小助在线 Demo"
             style={{ x: collageX, y: collageY }}
             initial={reduceMotion ? false : { opacity: 0, x: 24, rotate: 5 }}
             animate={heroRevealed ? { opacity: 1, x: 0, rotate: -3 } : { opacity: 0, x: 24, rotate: 5 }}

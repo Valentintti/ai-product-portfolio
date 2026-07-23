@@ -27,7 +27,7 @@ const tools = ["Codex", "Coze", "Claude Code", "Cursor", "WorkBuddy", "Kimi", "C
         <article class="project project--lead">
           <div class="project__visual project__visual--system">
             <div class="system-title">
-              <span>01 · LOCAL END-TO-END DEMO</span>
+              <span>01 · PUBLIC BROWSER MOCK DEMO</span>
               <strong>查件小助</strong>
               <small>物流 AI 客服</small>
             </div>
@@ -50,7 +50,8 @@ const tools = ["Codex", "Coze", "Claude Code", "Cursor", "WorkBuddy", "Kimi", "C
             <p>{logistics.summary}</p>
             <div class="project__actions">
               <ActionLink client:load href={`${base}projects/logistics-agent/`} label="查看案例" icon="external" />
-              <ActionLink client:load href={logistics.links[0].href} label="查看 GitHub" icon="github" />
+              <ActionLink client:load href={logistics.links[0].href} label="打开 Demo" icon="external" />
+              <ActionLink client:load href={logistics.links[1].href} label="查看 GitHub" icon="github" />
             </div>
           </div>
         </article>
