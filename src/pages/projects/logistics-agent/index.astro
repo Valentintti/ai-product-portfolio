@@ -21,22 +21,23 @@ const base = import.meta.env.BASE_URL.endsWith("/")
       <a class="case-back" href={`${base}#work`}>返回精选作品</a>
       <div class="case-hero__grid">
         <div class="case-hero__copy">
-          <p class="case-kicker">LOGISTICS AI CUSTOMER SERVICE · LOCAL DEMO</p>
+          <p class="case-kicker">LOGISTICS AI CUSTOMER SERVICE · PUBLIC BROWSER MOCK</p>
           <h1>从一次查件，设计一条模型不能越权的客服闭环。</h1>
           <p>{project.summary}</p>
           <div class="case-actions">
+            <ActionLink client:load href="https://valentintti.github.io/customer-service/" label="打开在线 Demo" icon="external" />
             <ActionLink client:load href="https://github.com/Valentintti/logistics-ai-customer-service" label="查看 GitHub" icon="github" />
           </div>
         </div>
         <dl class="case-meta">
           <div><dt>角色</dt><dd>AI 产品设计 / 独立开发</dd></div>
-          <div><dt>项目状态</dt><dd>本地端到端 Demo</dd></div>
+          <div><dt>项目状态</dt><dd>在线浏览器 Mock Demo</dd></div>
           <div><dt>核心场景</dt><dd>已发货但物流长时间未更新</dd></div>
           <div><dt>真实边界</dt><dd>Mock 订单、物流与工单</dd></div>
         </dl>
       </div>
       <figure class="case-cover case-cover--logistics">
-        <img src={`${base}assets/logistics-screen.webp`} alt="查件小助本地 Demo 真实首屏界面" />
+        <img src={`${base}assets/logistics-screen.webp`} alt="查件小助在线 Demo 首屏界面" />
         <figcaption>真实项目首屏结构。截图处于未启动状态，没有伪造工具执行结果。</figcaption>
       </figure>
     </section>

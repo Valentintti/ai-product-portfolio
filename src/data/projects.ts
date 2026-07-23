@@ -28,9 +28,14 @@ export const projects: ProjectCase[] = [
       "把模糊咨询收敛为可执行的查件流程，让模型负责理解和候选生成，让规则负责订单、状态与工单边界。",
     role: "AI 产品设计 / 独立开发",
     period: "2026",
-    status: "本地端到端 Demo",
+    status: "在线浏览器 Mock Demo",
     cover: "system-map",
     links: [
+      {
+        label: "在线 Demo",
+        href: "https://valentintti.github.io/customer-service/",
+        kind: "demo",
+      },
       {
         label: "GitHub",
         href: "https://github.com/Valentintti/logistics-ai-customer-service",
